@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เกมทำอาหาร - Sandwich Master</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .game-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .score-time {
+            display: flex;
+            gap: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .score { color: #ff6b6b; }
+        .time { color: #4ecdc4; }
+        .level { color: #45b7b8; }
+
+        .order-section {
+            background: #fff3cd;
+            border: 2px dashed #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .order-title {
+            font-size: 20px;
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .customer-order {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .ingredient {
+            width: 60px;
+            height: 40px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            user-select: none;
+        }
+
+        .ingredient:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .bread { background: #deb887; }
+        .meat { background: #8b4513; }
+        .cheese { background: #ffd700; }
+        .lettuce { background: #90ee90; }
+        .tomato { background: #ff6347; }
+        .onion { background: #f5deb3; }
+
+        .kitchen-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .ingredients-panel {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .ingredients-title {
+            font-size: 18px;
+            color: #495057;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .ingredients-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .sandwich-area {
+            background: #ffffff;
+            border: 3px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sandwich-title {
+            font-size: 18px;
+            color: #495057;
+            margin-bottom: 15px;
+        }
+
+        .sandwich-stack {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            gap: 2px;
+            min-height: 100px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .serve-btn {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        }
+
+        .clear-btn {
+            background: linear-gradient(45deg, #ffa726, #ff7043);
+        }
+
+        .message {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+            min-height: 25px;
+        }
+
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+
+        .game-over {
+            text-align: center;
+            background: rgba(255,255,255,0.9);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .kitchen-area {
+                grid-template-columns: 1fr;
+            }
+            
+            .ingredients-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🍳 เกมทำอาหาร - Sandwich Master</h1>
+    <div style="text-align: center; color: #fff; margin-bottom: 10px; font-size: 16px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">
+        ⭐ ผู้สร้าง: ณิชาภัทร ประเทศ ⭐
+    </div>
+    
+    <div class="game-container">
+        <div class="game-header">
+            <div class="score-time">
+                <div class="score">คะแนน: <span id="score">0</span></div>
+                <div class="time">เวลา: <span id="timer">60</span>s</div>
+                <div class="level">ระดับ: <span id="level">1</span></div>
+            </div>
+        </div>
+
+        <div class="order-section">
+            <div class="order-title">📋 ออเดอร์ลูกค้า</div>
+            <div class="customer-order" id="customerOrder"></div>
+            <div style="font-size: 14px; color: #856404;">ทำแซนด์วิชตามออเดอร์ (เรียงจากล่างขึ้นบน)</div>
+        </div>
+
+        <div class="kitchen-area">
+            <div class="ingredients-panel">
+                <div class="ingredients-title">🥘 วัตถุดิบ</div>
+                <div class="ingredients-grid">
+                    <div class="ingredient bread" onclick="addIngredient('bread', '🍞')" title="ขนมปัง">🍞</div>
+                    <div class="ingredient meat" onclick="addIngredient('meat', '🥩')" title="เนื้อ">🥩</div>
+                    <div class="ingredient cheese" onclick="addIngredient('cheese', '🧀')" title="ชีส">🧀</div>
+                    <div class="ingredient lettuce" onclick="addIngredient('lettuce', '🥬')" title="ผักสลัด">🥬</div>
+                    <div class="ingredient tomato" onclick="addIngredient('tomato', '🍅')" title="มะเขือเทศ">🍅</div>
+                    <div class="ingredient onion" onclick="addIngredient('onion', '🧅')" title="หัวหอม">🧅</div>
+                </div>
+            </div>
+
+            <div class="sandwich-area">
+                <div class="sandwich-title">🥪 แซนด์วิชของคุณ</div>
+                <div class="sandwich-stack" id="sandwichStack"></div>
+            </div>
+        </div>
+
+        <div class="message" id="message"></div>
+
+        <div class="controls">
+            <button class="serve-btn" onclick="serveSandwich()">🍽️ เสิร์ฟ</button>
+            <button class="clear-btn" onclick="clearSandwich()">🗑️ ทำใหม่</button>
+            <button onclick="startGame()">🎮 เริ่มเกมใหม่</button>
+        </div>
+    </div>
+
+    <div id="gameOver" class="game-over" style="display: none;">
+        <h2>🎉 เกมจบแล้ว!</h2>
+        <p>คะแนนรวม: <span id="finalScore">0</span></p>
+        <p>ระดับสูงสุด: <span id="finalLevel">1</span></p>
+        <button onclick="startGame()">เล่นอีกครั้ง</button>
+    </div>
+
+    <script>
+        let score = 0;
+        let level = 1;
+        let timeLeft = 60;
+        let gameActive = false;
+        let currentOrder = [];
+        let playerSandwich = [];
+        let timer;
+
+        const ingredients = {
+            bread: { emoji: '🍞', name: 'ขนมปัง' },
+            meat: { emoji: '🥩', name: 'เนื้อ' },
+            cheese: { emoji: '🧀', name: 'ชีส' },
+            lettuce: { emoji: '🥬', name: 'ผักสลัด' },
+            tomato: { emoji: '🍅', name: 'มะเขือเทศ' },
+            onion: { emoji: '🧅', name: 'หัวหอม' }
+        };
+
+        function startGame() {
+            score = 0;
+            level = 1;
+            timeLeft = 60;
+            gameActive = true;
+            playerSandwich = [];
+            
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('message').textContent = '';
+            
+            updateDisplay();
+            generateOrder();
+            startTimer();
+        }
+
+        function startTimer() {
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function generateOrder() {
+            currentOrder = [];
+            const orderLength = Math.min(3 + level, 7);
+            
+            // เริ่มและจบด้วยขนมปัง
+            currentOrder.push('bread');
+            
+            for (let i = 0; i < orderLength - 2; i++) {
+                const ingredientKeys = Object.keys(ingredients);
+                const randomIngredient = ingredientKeys[Math.floor(Math.random() * ingredientKeys.length)];
+                currentOrder.push(randomIngredient);
+            }
+            
+            currentOrder.push('bread');
+            
+            displayOrder();
+        }
+
+        function displayOrder() {
+            const orderElement = document.getElementById('customerOrder');
+            orderElement.innerHTML = '';
+            
+            currentOrder.forEach((ingredient, index) => {
+                const div = document.createElement('div');
+                div.className = `ingredient ${ingredient}`;
+                div.textContent = ingredients[ingredient].emoji;
+                div.style.order = index;
+                orderElement.appendChild(div);
+            });
+        }
+
+        function addIngredient(type, emoji) {
+            if (!gameActive) return;
+            
+            playerSandwich.push({ type, emoji });
+            updateSandwichDisplay();
+            
+            // เล่นเสียงเอฟเฟกต์ (จำลอง)
+            showMessage(`เพิ่ม${ingredients[type].name}แล้ว!`, 'success', 1000);
+        }
+
+        function updateSandwichDisplay() {
+            const stackElement = document.getElementById('sandwichStack');
+            stackElement.innerHTML = '';
+            
+            playerSandwich.forEach((ingredient, index) => {
+                const div = document.createElement('div');
+                div.className = `ingredient ${ingredient.type}`;
+                div.textContent = ingredient.emoji;
+                div.style.order = index;
+                stackElement.appendChild(div);
+            });
+        }
+
+        function serveSandwich() {
+            if (!gameActive || playerSandwich.length === 0) return;
+            
+            const isCorrect = checkOrder();
+            
+            if (isCorrect) {
+                const baseScore = 100;
+                const bonusScore = Math.max(0, timeLeft) * 2;
+                const levelBonus = level * 50;
+                const totalScore = baseScore + bonusScore + levelBonus;
+                
+                score += totalScore;
+                showMessage(`🎉 ถูกต้อง! +${totalScore} คะแนน`, 'success', 2000);
+                
+                // เลื่อนระดับ
+                if (score >= level * 500) {
+                    level++;
+                    timeLeft += 20; // เพิ่มเวลา
+                    showMessage(`🆙 ขึ้นระดับ ${level}!`, 'success', 2000);
+                }
+                
+                playerSandwich = [];
+                updateSandwichDisplay();
+                generateOrder();
+                
+            } else {
+                showMessage('❌ ไม่ถูกต้อง! ลองใหม่', 'error', 2000);
+                timeLeft -= 5; // ลดเวลา
+            }
+            
+            updateDisplay();
+        }
+
+        function checkOrder() {
+            if (playerSandwich.length !== currentOrder.length) return false;
+            
+            for (let i = 0; i < currentOrder.length; i++) {
+                if (playerSandwich[i].type !== currentOrder[i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function clearSandwich() {
+            playerSandwich = [];
+            updateSandwichDisplay();
+            showMessage('🗑️ ทำแซนด์วิชใหม่', 'success', 1000);
+        }
+
+        function showMessage(text, type, duration) {
+            const messageElement = document.getElementById('message');
+            messageElement.textContent = text;
+            messageElement.className = `message ${type}`;
+            
+            setTimeout(() => {
+                messageElement.textContent = '';
+                messageElement.className = 'message';
+            }, duration);
+        }
+
+        function updateDisplay() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('level').textContent = level;
+            document.getElementById('timer').textContent = timeLeft;
+        }
+
+        function endGame() {
+            gameActive = false;
+            clearInterval(timer);
+            
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('finalLevel').textContent = level;
+            document.getElementById('gameOver').style.display = 'block';
+            
+            showMessage('⏰ หมดเวลาแล้ว!', 'error', 3000);
+        }
+
+        // เริ่มเกมครั้งแรก
+        generateOrder();
+        updateDisplay();
+    </script>
+</body>
+</html>
