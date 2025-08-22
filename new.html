@@ -2,83 +2,87 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>หน้าแนะนำตัวเอง</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>แนะนำตัวเอง - น่ารักๆ</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;500&display=swap');
+
     body {
+      font-family: 'Kanit', sans-serif;
+      background: linear-gradient(to bottom right, #ffe9f3, #e0f7fa);
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #667eea, #764ba2);
-      color: white;
+      padding: 0;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
       min-height: 100vh;
     }
 
-    .container {
-      background-color: rgba(255, 255, 255, 0.1);
-      padding: 40px;
-      margin-top: 80px;
+    .card {
+      background: #ffffffdd;
       border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      padding: 40px;
+      max-width: 400px;
       text-align: center;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      max-width: 500px;
-      width: 90%;
+      transition: transform 0.3s;
     }
 
-    .profile-img {
-      width: 150px;
-      height: 150px;
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .profile-pic {
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
+      border: 4px solid #f9c8d9;
       object-fit: cover;
-      border: 4px solid white;
       margin-bottom: 20px;
     }
 
     h1 {
-      font-size: 2.5rem;
-      margin: 0;
+      font-size: 26px;
+      color: #ff4081;
+      margin: 10px 0;
     }
 
-    p.title {
-      font-size: 1.2rem;
-      margin-top: 5px;
-      color: #dcdcdc;
+    p {
+      color: #555;
+      font-size: 16px;
+      line-height: 1.5;
     }
 
-    p.description {
+    .socials {
       margin-top: 20px;
-      font-size: 1rem;
-      line-height: 1.6;
     }
 
-    .social-links a {
-      margin: 10px;
+    .socials a {
       text-decoration: none;
-      color: white;
-      font-size: 1.4rem;
+      margin: 0 10px;
+      font-size: 20px;
+      color: #ff69b4;
       transition: color 0.3s;
     }
 
-    .social-links a:hover {
-      color: #ffd700;
+    .socials a:hover {
+      color: #d81b60;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <img src="https://i.pravatar.cc/150?img=3" alt="รูปโปรไฟล์" class="profile-img">
-    <h1>ชื่อของคุณ</h1>
-    <p class="title">นักพัฒนาเว็บไซต์ | Web Developer</p>
-    <p class="description">
-      สวัสดีครับ/ค่ะ! ฉันคือผู้ที่หลงใหลในการออกแบบและพัฒนาเว็บไซต์ ใช้ HTML, CSS, และ JavaScript ในการสร้างประสบการณ์ใช้งานที่ยอดเยี่ยมให้กับผู้ใช้
-    </p>
-    <div class="social-links">
-      <a href="https://facebook.com/" target="_blank">Facebook</a>
-      <a href="https://github.com/" target="_blank">GitHub</a>
-      <a href="mailto:email@example.com">Email</a>
+
+  <div class="card">
+    <img class="profile-pic" src="https://i.pinimg.com/564x/26/ae/18/26ae18ae733309c89c3c84fd94a4ad4a.jpg" alt="รูปโปรไฟล์น่ารักๆ">
+    <h1>สวัสดีค่ะ! หนูชื่อ มายด์ 🌷</h1>
+    <p>หนูเป็นนักเรียนมัธยมที่ชอบเขียนโปรแกรม วาดรูป และอ่านนิยายค่ะ<br>ตอนนี้กำลังฝึกทำเว็บไซต์ด้วย HTML/CSS 💻✨</p>
+    
+    <div class="socials">
+      <a href="#" title="Facebook">🌸</a>
+      <a href="#" title="Instagram">📸</a>
+      <a href="#" title="GitHub">💻</a>
     </div>
   </div>
+
 </body>
 </html>
